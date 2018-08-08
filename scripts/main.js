@@ -1,6 +1,19 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-/* App */
+
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var Navigation = ReactRouter.Navigation;
+var History = ReactRouter.History;
+var createBrowserHistory = require('history/lib/createBrowserHistory');
+
+var h = require('../scripts/helpers');
+
+/* 
+    App 
+*/
+
 var App = React.createClass({
     render: function() {
         return (
@@ -15,10 +28,12 @@ var App = React.createClass({
     }
 });
 
-/* Header */   
+/* 
+    Header 
+*/   
+
 var Header = React.createClass({
     render: function() {
-        console.log(this.props);
         return(
             <header className="top">
                 <h1>Catch
@@ -33,7 +48,10 @@ var Header = React.createClass({
     }
 })
 
-/* Order */
+/* 
+    Order 
+*/
+
 var Order = React.createClass({
     render: function() {
         return(
@@ -42,7 +60,10 @@ var Order = React.createClass({
     }
 })
 
-/* Inventory */
+/* 
+    Inventory
+*/
+
 var Inventory = React.createClass({
     render: function() {
         return(
@@ -51,18 +72,51 @@ var Inventory = React.createClass({
     }
 })
 
-/* StorePicker */
+/* 
+    StorePicker 
+*/
+
 var StorePicker = React.createClass({
+    mixins: [History],
+    goToStore : function(event) {
+        event.preventDefault();
+        // get the data from the input
+        var storeId = this.refs.storeId.value;
+        this.history.pushState(null, '/store/' + storeId);
+        // transition from <StorePicker/> to <App/>
+        console.log('Ya submited it');
+    },
+
     render : function() {
         return(
-            <form className="store-selector">
+            <form className="store-selector" onSubmit={this.goToStore}>
                 <h2>Please Enter A Store</h2>
-                <input type="text" ref="storeid" required />
+                <input type="text" ref="storeId" defaultValue={h.getFunName()} required/>
                 <input type="Submit"/>
             </form>
         )
     }
 });
 
+/*
+    Not Found
+*/
+var NotFound = React.createClass({
+    render: function() {
+        return <h1>Not Found !</h1>
+    }
+})
 
-ReactDOM.render(<App/>, document.querySelector('#main'));
+/*
+    Routes
+*/
+
+var routes = (
+    <Router history={createBrowserHistory()}>
+        <Route path="/" component={StorePicker}/>
+        <Route path="/store/:storeId" component={App}/>
+        <Route path="*" component={NotFound}/>
+    </Router>
+)
+
+ReactDOM.render(routes, document.querySelector('#main'));
