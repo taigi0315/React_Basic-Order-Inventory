@@ -112,7 +112,7 @@ gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
 
 gulp.task('serveprod', function() {
   connect.server({
-    root: './scripts',
+    root: './',
     port: process.env.PORT || 5000, // localhost:5000
     livereload: false
   });
