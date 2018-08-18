@@ -109,3 +109,11 @@ gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
   gulp.watch('css/**/*', ['styles']); // gulp watch for stylus changes
   return buildScript('main.js', true); // browserify watch for JS changes
 });
+
+gulp.task('serveprod', function() {
+  connect.server({
+    root: './scripts',
+    port: process.env.PORT || 5000, // localhost:5000
+    livereload: false
+  });
+});
